@@ -1,193 +1,183 @@
-﻿<UserControl x:Class="Nodify.Calculator.EditorView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:Nodify.Calculator"
-             xmlns:nodify="https://miroiu.github.io/nodify"
-             xmlns:shared="clr-namespace:Nodify;assembly=Nodify.Shared"
-             xmlns:sys="clr-namespace:System;assembly=System.Runtime"
-             d:DataContext="{d:DesignInstance Type=local:EditorViewModel}"
-             mc:Ignorable="d"
-             d:DesignHeight="450"
-             d:DesignWidth="800">
+﻿<UserControl
+    x:Class="Nodify.Calculator.EditorView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Nodify.Calculator"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:nodify="https://miroiu.github.io/nodify"
+    xmlns:shared="clr-namespace:Nodify;assembly=Nodify.Shared"
+    xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+    d:DataContext="{d:DesignInstance Type=local:EditorViewModel}"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
     <UserControl.Resources>
-        <GeometryDrawing x:Key="SmallGridGeometry"
-                         Geometry="M0,0 L0,1 0.03,1 0.03,0.03 1,0.03 1,0 Z"
-                         Brush="{DynamicResource GridLinesBrush}" />
+        <GeometryDrawing
+            x:Key="SmallGridGeometry"
+            Brush="{DynamicResource GridLinesBrush}"
+            Geometry="M0,0 L0,1 0.03,1 0.03,0.03 1,0.03 1,0 Z" />
 
-        <GeometryDrawing x:Key="LargeGridGeometry"
-                         Geometry="M0,0 L0,1 0.015,1 0.015,0.015 1,0.015 1,0 Z"
-                         Brush="{DynamicResource GridLinesBrush}" />
+        <GeometryDrawing
+            x:Key="LargeGridGeometry"
+            Brush="{DynamicResource GridLinesBrush}"
+            Geometry="M0,0 L0,1 0.015,1 0.015,0.015 1,0.015 1,0 Z" />
 
-        <DrawingBrush x:Key="SmallGridLinesDrawingBrush"
-                      TileMode="Tile"
-                      ViewportUnits="Absolute"
-                      Viewport="0 0 15 15"
-                      Transform="{Binding ViewportTransform, ElementName=Editor}"
-                      Drawing="{StaticResource SmallGridGeometry}" />
+        <DrawingBrush
+            x:Key="SmallGridLinesDrawingBrush"
+            Drawing="{StaticResource SmallGridGeometry}"
+            TileMode="Tile"
+            Transform="{Binding ViewportTransform, ElementName=Editor}"
+            Viewport="0 0 15 15"
+            ViewportUnits="Absolute" />
 
-        <DrawingBrush x:Key="LargeGridLinesDrawingBrush"
-                      TileMode="Tile"
-                      ViewportUnits="Absolute"
-                      Opacity="0.5"
-                      Viewport="0 0 150 150"
-                      Transform="{Binding ViewportTransform, ElementName=Editor}"
-                      Drawing="{StaticResource LargeGridGeometry}" />
+        <DrawingBrush
+            x:Key="LargeGridLinesDrawingBrush"
+            Drawing="{StaticResource LargeGridGeometry}"
+            Opacity="0.5"
+            TileMode="Tile"
+            Transform="{Binding ViewportTransform, ElementName=Editor}"
+            Viewport="0 0 150 150"
+            ViewportUnits="Absolute" />
 
-        <LinearGradientBrush x:Key="AnimatedBrush"
-                             StartPoint="0 0"
-                             EndPoint="1 0">
-            <GradientStop Color="#6366f1"
-                          Offset="0" />
-            <GradientStop Color="#a855f7"
-                          Offset="0.5" />
-            <GradientStop Color="#ec4899"
-                          Offset="1" />
+        <LinearGradientBrush x:Key="AnimatedBrush" StartPoint="0 0" EndPoint="1 0">
+            <GradientStop Offset="0" Color="#6366f1" />
+            <GradientStop Offset="0.5" Color="#a855f7" />
+            <GradientStop Offset="1" Color="#ec4899" />
         </LinearGradientBrush>
-        <Border x:Key="AnimatedBorderPlaceholder"
-                BorderBrush="{StaticResource AnimatedBrush}" />
+        <Border x:Key="AnimatedBorderPlaceholder" BorderBrush="{StaticResource AnimatedBrush}" />
 
-        <Storyboard x:Key="AnimateBorder"
-                    RepeatBehavior="Forever">
-            <PointAnimation Storyboard.TargetProperty="BorderBrush.(LinearGradientBrush.StartPoint)"
-                            Storyboard.Target="{StaticResource AnimatedBorderPlaceholder}"
-                            Duration="0:0:2"
-                            To="1 0" />
-            <PointAnimation Storyboard.TargetProperty="BorderBrush.(LinearGradientBrush.StartPoint)"
-                            Storyboard.Target="{StaticResource AnimatedBorderPlaceholder}"
-                            Duration="0:0:2"
-                            To="1 1"
-                            BeginTime="0:0:2" />
-            <PointAnimation Storyboard.TargetProperty="BorderBrush.(LinearGradientBrush.StartPoint)"
-                            Storyboard.Target="{StaticResource AnimatedBorderPlaceholder}"
-                            Duration="0:0:2"
-                            To="0 1"
-                            BeginTime="0:0:4" />
-            <PointAnimation Storyboard.TargetProperty="BorderBrush.(LinearGradientBrush.StartPoint)"
-                            Storyboard.Target="{StaticResource AnimatedBorderPlaceholder}"
-                            Duration="0:0:2"
-                            To="0 0"
-                            BeginTime="0:0:6" />
-            <PointAnimation Storyboard.TargetProperty="BorderBrush.(LinearGradientBrush.EndPoint)"
-                            Storyboard.Target="{StaticResource AnimatedBorderPlaceholder}"
-                            Duration="0:0:2"
-                            To="1 1" />
-            <PointAnimation Storyboard.TargetProperty="BorderBrush.(LinearGradientBrush.EndPoint)"
-                            Storyboard.Target="{StaticResource AnimatedBorderPlaceholder}"
-                            Duration="0:0:2"
-                            To="0 1"
-                            BeginTime="0:0:2" />
-            <PointAnimation Storyboard.TargetProperty="BorderBrush.(LinearGradientBrush.EndPoint)"
-                            Storyboard.Target="{StaticResource AnimatedBorderPlaceholder}"
-                            Duration="0:0:2"
-                            To="0 0"
-                            BeginTime="0:0:4" />
-            <PointAnimation Storyboard.TargetProperty="BorderBrush.(LinearGradientBrush.EndPoint)"
-                            Storyboard.Target="{StaticResource AnimatedBorderPlaceholder}"
-                            Duration="0:0:2"
-                            To="1 0"
-                            BeginTime="0:0:6" />
+        <Storyboard x:Key="AnimateBorder" RepeatBehavior="Forever">
+            <PointAnimation
+                Storyboard.Target="{StaticResource AnimatedBorderPlaceholder}"
+                Storyboard.TargetProperty="BorderBrush.(LinearGradientBrush.StartPoint)"
+                To="1 0"
+                Duration="0:0:2" />
+            <PointAnimation
+                BeginTime="0:0:2"
+                Storyboard.Target="{StaticResource AnimatedBorderPlaceholder}"
+                Storyboard.TargetProperty="BorderBrush.(LinearGradientBrush.StartPoint)"
+                To="1 1"
+                Duration="0:0:2" />
+            <PointAnimation
+                BeginTime="0:0:4"
+                Storyboard.Target="{StaticResource AnimatedBorderPlaceholder}"
+                Storyboard.TargetProperty="BorderBrush.(LinearGradientBrush.StartPoint)"
+                To="0 1"
+                Duration="0:0:2" />
+            <PointAnimation
+                BeginTime="0:0:6"
+                Storyboard.Target="{StaticResource AnimatedBorderPlaceholder}"
+                Storyboard.TargetProperty="BorderBrush.(LinearGradientBrush.StartPoint)"
+                To="0 0"
+                Duration="0:0:2" />
+            <PointAnimation
+                Storyboard.Target="{StaticResource AnimatedBorderPlaceholder}"
+                Storyboard.TargetProperty="BorderBrush.(LinearGradientBrush.EndPoint)"
+                To="1 1"
+                Duration="0:0:2" />
+            <PointAnimation
+                BeginTime="0:0:2"
+                Storyboard.Target="{StaticResource AnimatedBorderPlaceholder}"
+                Storyboard.TargetProperty="BorderBrush.(LinearGradientBrush.EndPoint)"
+                To="0 1"
+                Duration="0:0:2" />
+            <PointAnimation
+                BeginTime="0:0:4"
+                Storyboard.Target="{StaticResource AnimatedBorderPlaceholder}"
+                Storyboard.TargetProperty="BorderBrush.(LinearGradientBrush.EndPoint)"
+                To="0 0"
+                Duration="0:0:2" />
+            <PointAnimation
+                BeginTime="0:0:6"
+                Storyboard.Target="{StaticResource AnimatedBorderPlaceholder}"
+                Storyboard.TargetProperty="BorderBrush.(LinearGradientBrush.EndPoint)"
+                To="1 0"
+                Duration="0:0:2" />
         </Storyboard>
 
         <local:ItemToListConverter x:Key="ItemToListConverter" />
 
-        <DataTemplate x:Key="ConnectionTemplate"
-                      DataType="{x:Type local:ConnectionViewModel}">
-            <nodify:CircuitConnection Source="{Binding Output.Anchor}"
-                                      Target="{Binding Input.Anchor}" />
+        <DataTemplate x:Key="ConnectionTemplate" DataType="{x:Type local:ConnectionViewModel}">
+            <nodify:CircuitConnection Source="{Binding Output.Anchor}" Target="{Binding Input.Anchor}" />
         </DataTemplate>
 
-        <DataTemplate x:Key="PendingConnectionTemplate"
-                      DataType="{x:Type local:PendingConnectionViewModel}">
-            <nodify:PendingConnection IsVisible="{Binding IsVisible}"
-                                      Source="{Binding Source, Mode=OneWayToSource}"
-                                      Target="{Binding Target, Mode=OneWayToSource}"
-                                      TargetAnchor="{Binding TargetLocation, Mode=OneWayToSource}"
-                                      StartedCommand="{Binding DataContext.StartConnectionCommand, RelativeSource={RelativeSource AncestorType={x:Type nodify:NodifyEditor}}}"
-                                      CompletedCommand="{Binding DataContext.CreateConnectionCommand, RelativeSource={RelativeSource AncestorType={x:Type nodify:NodifyEditor}}}" />
+        <DataTemplate x:Key="PendingConnectionTemplate" DataType="{x:Type local:PendingConnectionViewModel}">
+            <nodify:PendingConnection
+                CompletedCommand="{Binding DataContext.CreateConnectionCommand, RelativeSource={RelativeSource AncestorType={x:Type nodify:NodifyEditor}}}"
+                IsVisible="{Binding IsVisible}"
+                Source="{Binding Source, Mode=OneWayToSource}"
+                StartedCommand="{Binding DataContext.StartConnectionCommand, RelativeSource={RelativeSource AncestorType={x:Type nodify:NodifyEditor}}}"
+                Target="{Binding Target, Mode=OneWayToSource}"
+                TargetAnchor="{Binding TargetLocation, Mode=OneWayToSource}" />
         </DataTemplate>
 
-        <Style x:Key="ItemContainerStyle"
-               TargetType="{x:Type nodify:ItemContainer}"
-               BasedOn="{StaticResource {x:Type nodify:ItemContainer}}">
-            <Setter Property="Location"
-                    Value="{Binding Location}" />
-            <Setter Property="IsSelected"
-                    Value="{Binding IsSelected}" />
-            <Setter Property="ActualSize"
-                    Value="{Binding Size, Mode=OneWayToSource}" />
-            <Setter Property="BorderBrush"
-                    Value="{Binding BorderBrush, Source={StaticResource AnimatedBorderPlaceholder}}" />
-            <Setter Property="BorderThickness"
-                    Value="2" />
+        <Style
+            x:Key="ItemContainerStyle"
+            BasedOn="{StaticResource {x:Type nodify:ItemContainer}}"
+            TargetType="{x:Type nodify:ItemContainer}">
+            <Setter Property="Location" Value="{Binding Location}" />
+            <Setter Property="IsSelected" Value="{Binding IsSelected}" />
+            <Setter Property="ActualSize" Value="{Binding Size, Mode=OneWayToSource}" />
+            <Setter Property="BorderBrush" Value="{Binding BorderBrush, Source={StaticResource AnimatedBorderPlaceholder}}" />
+            <Setter Property="BorderThickness" Value="2" />
         </Style>
     </UserControl.Resources>
 
     <Grid>
-        <nodify:NodifyEditor DataContext="{Binding Calculator}"
-                             ItemsSource="{Binding Operations}"
-                             Connections="{Binding Connections}"
-                             SelectedItems="{Binding SelectedOperations}"
-                             DisconnectConnectorCommand="{Binding DisconnectConnectorCommand}"
-                             PendingConnection="{Binding PendingConnection}"
-                             PendingConnectionTemplate="{StaticResource PendingConnectionTemplate}"
-                             ConnectionTemplate="{StaticResource ConnectionTemplate}"
-                             Background="{StaticResource SmallGridLinesDrawingBrush}"
-                             ItemContainerStyle="{StaticResource ItemContainerStyle}"
-                             HasCustomContextMenu="True"
-                             GridCellSize="15"
-                             AllowDrop="True"
-                             Drop="OnDropNode"
-                             x:Name="Editor">
+        <nodify:NodifyEditor
+            x:Name="Editor"
+            AllowDrop="True"
+            Background="{StaticResource SmallGridLinesDrawingBrush}"
+            ConnectionTemplate="{StaticResource ConnectionTemplate}"
+            Connections="{Binding Connections}"
+            DataContext="{Binding Calculator}"
+            DisconnectConnectorCommand="{Binding DisconnectConnectorCommand}"
+            Drop="OnDropNode"
+            GridCellSize="15"
+            HasCustomContextMenu="True"
+            ItemContainerStyle="{StaticResource ItemContainerStyle}"
+            ItemsSource="{Binding Operations}"
+            PendingConnection="{Binding PendingConnection}"
+            PendingConnectionTemplate="{StaticResource PendingConnectionTemplate}"
+            SelectedItems="{Binding SelectedOperations}">
             <nodify:NodifyEditor.Resources>
-                <Style TargetType="{x:Type nodify:NodeInput}"
-                       BasedOn="{StaticResource {x:Type nodify:NodeInput}}">
-                    <Setter Property="Header"
-                            Value="{Binding}" />
-                    <Setter Property="IsConnected"
-                            Value="{Binding IsConnected}" />
-                    <Setter Property="Anchor"
-                            Value="{Binding Anchor, Mode=OneWayToSource}" />
-                    <Setter Property="ToolTip"
-                            Value="{Binding Value}" />
+                <Style BasedOn="{StaticResource {x:Type nodify:NodeInput}}" TargetType="{x:Type nodify:NodeInput}">
+                    <Setter Property="Header" Value="{Binding}" />
+                    <Setter Property="IsConnected" Value="{Binding IsConnected}" />
+                    <Setter Property="Anchor" Value="{Binding Anchor, Mode=OneWayToSource}" />
+                    <Setter Property="ToolTip" Value="{Binding Value}" />
                     <Setter Property="HeaderTemplate">
                         <Setter.Value>
                             <DataTemplate DataType="{x:Type local:ConnectorViewModel}">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding Title}"
-                                               Margin="0 0 5 0" />
-                                    <TextBox Text="{Binding Value}"
-                                             Visibility="{Binding IsConnected, Converter={shared:BooleanToVisibilityConverter Negate=True}}" />
+                                    <TextBlock Margin="0,0,5,0" Text="{Binding Title}" />
+                                    <TextBox Text="{Binding Value}" Visibility="{Binding IsConnected, Converter={shared:BooleanToVisibilityConverter Negate=True}}" />
                                 </StackPanel>
                             </DataTemplate>
                         </Setter.Value>
                     </Setter>
                 </Style>
 
-                <Style TargetType="{x:Type nodify:NodeOutput}"
-                       BasedOn="{StaticResource {x:Type nodify:NodeOutput}}">
-                    <Setter Property="Header"
-                            Value="{Binding}" />
-                    <Setter Property="IsConnected"
-                            Value="{Binding IsConnected}" />
-                    <Setter Property="Anchor"
-                            Value="{Binding Anchor, Mode=OneWayToSource}" />
+                <Style BasedOn="{StaticResource {x:Type nodify:NodeOutput}}" TargetType="{x:Type nodify:NodeOutput}">
+                    <Setter Property="Header" Value="{Binding}" />
+                    <Setter Property="IsConnected" Value="{Binding IsConnected}" />
+                    <Setter Property="Anchor" Value="{Binding Anchor, Mode=OneWayToSource}" />
                     <Setter Property="HeaderTemplate">
                         <Setter.Value>
                             <DataTemplate DataType="{x:Type local:ConnectorViewModel}">
-                                <TextBox Text="{Binding Value}"
-                                         IsEnabled="False" />
+                                <TextBox IsEnabled="False" Text="{Binding Value}" />
                             </DataTemplate>
                         </Setter.Value>
                     </Setter>
                 </Style>
 
                 <DataTemplate DataType="{x:Type local:OperationGraphViewModel}">
-                    <nodify:GroupingNode Header="{Binding}"
-                                         CanResize="{Binding IsExpanded}"
-                                         ActualSize="{Binding DesiredSize, Mode=TwoWay}"
-                                         MovementMode="Self">
+                    <nodify:GroupingNode
+                        ActualSize="{Binding DesiredSize, Mode=TwoWay}"
+                        CanResize="{Binding IsExpanded}"
+                        Header="{Binding}"
+                        MovementMode="Self">
                         <nodify:GroupingNode.HeaderTemplate>
                             <DataTemplate DataType="{x:Type local:OperationGraphViewModel}">
                                 <Grid>
@@ -197,47 +187,46 @@
                                     </Grid.ColumnDefinitions>
 
                                     <TextBlock Text="{Binding Title}" />
-                                    <StackPanel Orientation="Horizontal"
-                                                Margin="5 0 0 0"
-                                                Grid.Column="1">
-                                        <TextBlock Text="Expand?"
-                                                   Visibility="{Binding IsExpanded, Converter={shared:BooleanToVisibilityConverter}}"
-                                                   Margin="0 0 5 0" />
+                                    <StackPanel
+                                        Grid.Column="1"
+                                        Margin="5,0,0,0"
+                                        Orientation="Horizontal">
+                                        <TextBlock
+                                            Margin="0,0,5,0"
+                                            Text="Expand?"
+                                            Visibility="{Binding IsExpanded, Converter={shared:BooleanToVisibilityConverter}}" />
                                         <CheckBox IsChecked="{Binding IsExpanded}" />
                                     </StackPanel>
                                 </Grid>
                             </DataTemplate>
                         </nodify:GroupingNode.HeaderTemplate>
                         <Grid>
-                            <ScrollViewer CanContentScroll="True"
-                                          Visibility="{Binding IsExpanded, Converter={shared:BooleanToVisibilityConverter}}">
-                                <nodify:NodifyEditor Tag="{Binding DataContext, RelativeSource={RelativeSource Self}}"
-                                                     DataContext="{Binding InnerCalculator}"
-                                                     ItemsSource="{Binding Operations}"
-                                                     Connections="{Binding Connections}"
-                                                     SelectedItems="{Binding SelectedOperations}"
-                                                     DisconnectConnectorCommand="{Binding DisconnectConnectorCommand}"
-                                                     PendingConnection="{Binding PendingConnection}"
-                                                     PendingConnectionTemplate="{StaticResource PendingConnectionTemplate}"
-                                                     ConnectionTemplate="{StaticResource ConnectionTemplate}"
-                                                     ItemContainerStyle="{StaticResource ItemContainerStyle}"
-                                                     HasCustomContextMenu="True"
-                                                     Background="Transparent"
-                                                     GridCellSize="15"
-                                                     AllowDrop="True"
-                                                     Drop="OnDropNode"
-                                                     Visibility="{Binding DataContext.IsExpanded, RelativeSource={RelativeSource AncestorType=nodify:GroupingNode}, Converter={shared:BooleanToVisibilityConverter}}">
+                            <ScrollViewer CanContentScroll="True" Visibility="{Binding IsExpanded, Converter={shared:BooleanToVisibilityConverter}}">
+                                <nodify:NodifyEditor
+                                    AllowDrop="True"
+                                    Background="Transparent"
+                                    ConnectionTemplate="{StaticResource ConnectionTemplate}"
+                                    Connections="{Binding Connections}"
+                                    DataContext="{Binding InnerCalculator}"
+                                    DisconnectConnectorCommand="{Binding DisconnectConnectorCommand}"
+                                    Drop="OnDropNode"
+                                    GridCellSize="15"
+                                    HasCustomContextMenu="True"
+                                    ItemContainerStyle="{StaticResource ItemContainerStyle}"
+                                    ItemsSource="{Binding Operations}"
+                                    PendingConnection="{Binding PendingConnection}"
+                                    PendingConnectionTemplate="{StaticResource PendingConnectionTemplate}"
+                                    SelectedItems="{Binding SelectedOperations}"
+                                    Tag="{Binding DataContext, RelativeSource={RelativeSource Self}}"
+                                    Visibility="{Binding DataContext.IsExpanded, RelativeSource={RelativeSource AncestorType=nodify:GroupingNode}, Converter={shared:BooleanToVisibilityConverter}}">
 
                                     <nodify:NodifyEditor.InputBindings>
-                                        <KeyBinding Key="Delete"
-                                                    Command="{Binding DeleteSelectionCommand}" />
-                                        <KeyBinding Key="C"
-                                                    Command="{Binding GroupSelectionCommand}" />
+                                        <KeyBinding Key="Delete" Command="{Binding DeleteSelectionCommand}" />
+                                        <KeyBinding Key="C" Command="{Binding GroupSelectionCommand}" />
                                     </nodify:NodifyEditor.InputBindings>
 
                                     <CompositeCollection>
-                                        <nodify:DecoratorContainer DataContext="{Binding OperationsMenu}"
-                                                                   Location="{Binding Location}">
+                                        <nodify:DecoratorContainer DataContext="{Binding OperationsMenu}" Location="{Binding Location}">
                                             <local:OperationsMenuView />
                                         </nodify:DecoratorContainer>
                                     </CompositeCollection>
@@ -259,29 +248,33 @@
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
 
-                                <nodify:NodeOutput DataContext="{Binding Output}"
-                                                   Grid.Column="1"
-                                                   VerticalAlignment="Top"
-                                                   HorizontalAlignment="Right" />
+                                <nodify:NodeOutput
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Top"
+                                    DataContext="{Binding Output}" />
                             </Grid>
                         </Grid>
                     </nodify:GroupingNode>
                 </DataTemplate>
 
                 <DataTemplate DataType="{x:Type local:ExpandoOperationViewModel}">
-                    <nodify:Node Header="{Binding Title}"
-                                 Content="{Binding}"
-                                 Input="{Binding Input}"
-                                 Output="{Binding Output, Converter={StaticResource ItemToListConverter}}">
+                    <nodify:Node
+                        Content="{Binding}"
+                        Header="{Binding Title}"
+                        Input="{Binding Input}"
+                        Output="{Binding Output, Converter={StaticResource ItemToListConverter}}">
                         <nodify:Node.ContentTemplate>
                             <DataTemplate DataType="{x:Type local:ExpandoOperationViewModel}">
                                 <StackPanel>
-                                    <Button Style="{StaticResource IconButton}"
-                                            Content="{StaticResource PlusIcon}"
-                                            Command="{Binding AddInputCommand}" />
-                                    <Button Style="{StaticResource IconButton}"
-                                            Content="{StaticResource RemoveKeyIcon}"
-                                            Command="{Binding RemoveInputCommand}" />
+                                    <Button
+                                        Command="{Binding AddInputCommand}"
+                                        Content="{StaticResource PlusIcon}"
+                                        Style="{StaticResource IconButton}" />
+                                    <Button
+                                        Command="{Binding RemoveInputCommand}"
+                                        Content="{StaticResource RemoveKeyIcon}"
+                                        Style="{StaticResource IconButton}" />
                                 </StackPanel>
                             </DataTemplate>
                         </nodify:Node.ContentTemplate>
@@ -289,138 +282,129 @@
                 </DataTemplate>
 
                 <DataTemplate DataType="{x:Type local:ExpressionOperationViewModel}">
-                    <nodify:Node Content="{Binding}"
-                                 Input="{Binding Input}"
-                                 Output="{Binding Output, Converter={StaticResource ItemToListConverter}}">
+                    <nodify:Node
+                        Content="{Binding}"
+                        Input="{Binding Input}"
+                        Output="{Binding Output, Converter={StaticResource ItemToListConverter}}">
                         <nodify:Node.ContentTemplate>
                             <DataTemplate DataType="{x:Type local:ExpressionOperationViewModel}">
-                                <TextBox Text="{Binding Expression}"
-                                         MinWidth="100"
-                                         Margin="5 0 0 0" />
+                                <TextBox
+                                    MinWidth="100"
+                                    Margin="5,0,0,0"
+                                    Text="{Binding Expression}" />
                             </DataTemplate>
                         </nodify:Node.ContentTemplate>
                     </nodify:Node>
                 </DataTemplate>
 
                 <DataTemplate DataType="{x:Type local:CalculatorOperationViewModel}">
-                    <nodify:Node Header="{Binding Title}"
-                                 Input="{Binding Input}"
-                                 Output="{Binding Output, Converter={StaticResource ItemToListConverter}}"
-                                 ToolTip="Double click to expand">
+                    <nodify:Node
+                        Header="{Binding Title}"
+                        Input="{Binding Input}"
+                        Output="{Binding Output, Converter={StaticResource ItemToListConverter}}"
+                        ToolTip="Double click to expand">
                         <nodify:Node.InputBindings>
-                            <MouseBinding Gesture="LeftDoubleClick"
-                                          Command="{Binding DataContext.OpenCalculatorCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                          CommandParameter="{Binding InnerCalculator}" />
+                            <MouseBinding
+                                Command="{Binding DataContext.OpenCalculatorCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                CommandParameter="{Binding InnerCalculator}"
+                                Gesture="LeftDoubleClick" />
                         </nodify:Node.InputBindings>
                     </nodify:Node>
                 </DataTemplate>
 
                 <DataTemplate DataType="{x:Type local:CalculatorInputOperationViewModel}">
                     <DataTemplate.Resources>
-                        <Style TargetType="{x:Type nodify:NodeOutput}"
-                               BasedOn="{StaticResource {x:Type nodify:NodeOutput}}">
-                            <Setter Property="Header"
-                                    Value="{Binding}" />
-                            <Setter Property="IsConnected"
-                                    Value="{Binding IsConnected}" />
-                            <Setter Property="Anchor"
-                                    Value="{Binding Anchor, Mode=OneWayToSource}" />
+                        <Style BasedOn="{StaticResource {x:Type nodify:NodeOutput}}" TargetType="{x:Type nodify:NodeOutput}">
+                            <Setter Property="Header" Value="{Binding}" />
+                            <Setter Property="IsConnected" Value="{Binding IsConnected}" />
+                            <Setter Property="Anchor" Value="{Binding Anchor, Mode=OneWayToSource}" />
                             <Setter Property="HeaderTemplate">
                                 <Setter.Value>
                                     <DataTemplate DataType="{x:Type local:ConnectorViewModel}">
                                         <StackPanel Orientation="Horizontal">
-                                            <TextBox Text="{Binding Value}"
-                                                     IsEnabled="False" />
-                                            <TextBlock Text="{Binding Title}"
-                                                       Margin="5 0 0 0" />
+                                            <TextBox IsEnabled="False" Text="{Binding Value}" />
+                                            <TextBlock Margin="5,0,0,0" Text="{Binding Title}" />
                                         </StackPanel>
                                     </DataTemplate>
                                 </Setter.Value>
                             </Setter>
                         </Style>
                     </DataTemplate.Resources>
-                    <nodify:Node Header="{Binding Title}"
-                                 Output="{Binding Output}">
+                    <nodify:Node Header="{Binding Title}" Output="{Binding Output}">
                         <StackPanel>
-                            <Button Style="{StaticResource IconButton}"
-                                    Content="{StaticResource PlusIcon}"
-                                    Command="{Binding AddOutputCommand}" />
-                            <Button Style="{StaticResource IconButton}"
-                                    Content="{StaticResource RemoveKeyIcon}"
-                                    Command="{Binding RemoveOutputCommand}" />
+                            <Button
+                                Command="{Binding AddOutputCommand}"
+                                Content="{StaticResource PlusIcon}"
+                                Style="{StaticResource IconButton}" />
+                            <Button
+                                Command="{Binding RemoveOutputCommand}"
+                                Content="{StaticResource RemoveKeyIcon}"
+                                Style="{StaticResource IconButton}" />
                         </StackPanel>
                     </nodify:Node>
                 </DataTemplate>
 
                 <DataTemplate DataType="{x:Type local:OperationGroupViewModel}">
-                    <nodify:GroupingNode Header="{Binding Title}"
-                                         ActualSize="{Binding GroupSize, Mode=TwoWay}" />
+                    <nodify:GroupingNode ActualSize="{Binding GroupSize, Mode=TwoWay}" Header="{Binding Title}" />
                 </DataTemplate>
 
                 <DataTemplate DataType="{x:Type local:OperationViewModel}">
-                    <nodify:Node Content="{Binding Title}"
-                                 Input="{Binding Input}"
-                                 Output="{Binding Output, Converter={StaticResource ItemToListConverter}}" />
+                    <nodify:Node
+                        Content="{Binding Title}"
+                        Input="{Binding Input}"
+                        Output="{Binding Output, Converter={StaticResource ItemToListConverter}}" />
                 </DataTemplate>
             </nodify:NodifyEditor.Resources>
 
             <nodify:NodifyEditor.InputBindings>
-                <KeyBinding Key="Delete"
-                            Command="{Binding DeleteSelectionCommand}" />
-                <KeyBinding Key="C"
-                            Command="{Binding GroupSelectionCommand}" />
+                <KeyBinding Key="Delete" Command="{Binding DeleteSelectionCommand}" />
+                <KeyBinding Key="C" Command="{Binding GroupSelectionCommand}" />
             </nodify:NodifyEditor.InputBindings>
 
             <nodify:NodifyEditor.Triggers>
                 <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-                    <BeginStoryboard Name="AnimateBorder"
-                                     Storyboard="{StaticResource AnimateBorder}" />
+                    <BeginStoryboard Name="AnimateBorder" Storyboard="{StaticResource AnimateBorder}" />
                 </EventTrigger>
             </nodify:NodifyEditor.Triggers>
 
             <CompositeCollection>
-                <nodify:DecoratorContainer DataContext="{Binding OperationsMenu}"
-                                           Location="{Binding Location}">
+                <nodify:DecoratorContainer DataContext="{Binding OperationsMenu}" Location="{Binding Location}">
                     <local:OperationsMenuView />
                 </nodify:DecoratorContainer>
             </CompositeCollection>
         </nodify:NodifyEditor>
 
-        <Grid Background="{StaticResource LargeGridLinesDrawingBrush}"
-              Panel.ZIndex="-2" />
+        <Grid Panel.ZIndex="-2" Background="{StaticResource LargeGridLinesDrawingBrush}" />
 
-        <Border HorizontalAlignment="Right"
-                MinWidth="200"
-                MaxWidth="300"
-                Padding="7"
-                Margin="10"
-                CornerRadius="3"
-                BorderThickness="2">
+        <Border
+            MinWidth="200"
+            MaxWidth="300"
+            Margin="10"
+            Padding="7"
+            HorizontalAlignment="Right"
+            BorderThickness="2"
+            CornerRadius="3">
             <Border.Background>
-                <SolidColorBrush Color="{DynamicResource BackgroundColor}"
-                                 Opacity="0.7" />
+                <SolidColorBrush Opacity="0.7" Color="{DynamicResource BackgroundColor}" />
             </Border.Background>
             <ScrollViewer>
                 <ItemsControl ItemsSource="{Binding Calculator.OperationsMenu.AvailableOperations}">
                     <ItemsControl.ItemContainerStyle>
                         <Style>
-                            <Setter Property="FrameworkElement.Margin"
-                                    Value="5" />
-                            <Setter Property="FrameworkElement.HorizontalAlignment"
-                                    Value="Left" />
-                            <Setter Property="FrameworkElement.Cursor"
-                                    Value="Hand" />
-                            <Setter Property="FrameworkElement.ToolTip"
-                                    Value="Drag and drop into the editor" />
+                            <Setter Property="FrameworkElement.Margin" Value="5" />
+                            <Setter Property="FrameworkElement.HorizontalAlignment" Value="Left" />
+                            <Setter Property="FrameworkElement.Cursor" Value="Hand" />
+                            <Setter Property="FrameworkElement.ToolTip" Value="Drag and drop into the editor" />
                         </Style>
                     </ItemsControl.ItemContainerStyle>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate DataType="{x:Type local:OperationViewModel}">
-                            <nodify:Node Content="{Binding Title}"
-                                         Input="{Binding Input}"
-                                         BorderBrush="{StaticResource AnimatedBrush}"
-                                         BorderThickness="2"
-                                         MouseMove="OnNodeDrag">
+                            <nodify:Node
+                                BorderBrush="{StaticResource AnimatedBrush}"
+                                BorderThickness="2"
+                                Content="{Binding Title}"
+                                Input="{Binding Input}"
+                                MouseMove="OnNodeDrag">
                                 <nodify:Node.Output>
                                     <CompositeCollection>
                                         <sys:String>Output</sys:String>

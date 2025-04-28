@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
     <ResourceDictionary.MergedDictionaries>
-        <!--NODES-->
+        <!--  NODES  -->
         <ResourceDictionary Source="Node.xaml" />
         <ResourceDictionary Source="KnotNode.xaml" />
         <ResourceDictionary Source="GroupingNode.xaml" />
@@ -12,12 +12,12 @@
         <ResourceDictionary Source="PendingConnection.xaml" />
         <ResourceDictionary Source="CuttingLine.xaml" />
 
-        <!--CORE-->
+        <!--  CORE  -->
         <ResourceDictionary Source="ItemContainer.xaml" />
         <ResourceDictionary Source="DecoratorContainer.xaml" />
         <ResourceDictionary Source="NodifyEditor.xaml" />
-        
-        <!--WIDGETS-->
+
+        <!--  WIDGETS  -->
         <ResourceDictionary Source="Minimap.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>
