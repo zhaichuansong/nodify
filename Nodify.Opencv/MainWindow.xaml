@@ -17,7 +17,7 @@
     <Grid>
         <nodify:NodifyEditor
             Connections="{Binding Connections}"
-            GridCellSize="20"
+            GridCellSize="10"
             ItemsSource="{Binding Nodes}">
             <nodify:NodifyEditor.Resources>
                 <DataTemplate DataType="{x:Type vm:BaseNodeViewModel}">
