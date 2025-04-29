@@ -14,42 +14,76 @@
     <Window.DataContext>
         <vm:MainViewModel />
     </Window.DataContext>
+    <Window.Resources>
+        <DataTemplate x:Key="ConnectionTemplate" DataType="{x:Type vm:ConnectionNodeViewModel}">
+            <nodify:CircuitConnection Source="{Binding Output.Anchor}" Target="{Binding Input.Anchor}" />
+        </DataTemplate>
+        <DataTemplate x:Key="PendingConnectionTemplate" DataType="{x:Type vm:PendingConnectionViewModel}">
+            <nodify:PendingConnection
+                CompletedCommand="{Binding DataContext.CreateConnectionCommand, RelativeSource={RelativeSource AncestorType=nodify:NodifyEditor}}"
+                IsVisible="{Binding IsVisible}"
+                Source="{Binding Source, Mode=OneWayToSource}"
+                StartedCommand="{Binding DataContext.StartConnectionCommand, RelativeSource={RelativeSource AncestorType=nodify:NodifyEditor}}"
+                Target="{Binding Target, Mode=OneWayToSource}"
+                TargetAnchor="{Binding TargetLocation, Mode=OneWayToSource}" />
+        </DataTemplate>
+        <Style
+            x:Key="ItemContainerStyle"
+            BasedOn="{StaticResource {x:Type nodify:ItemContainer}}"
+            TargetType="{x:Type nodify:ItemContainer}">
+            <Setter Property="Location" Value="{Binding Location}" />
+            <Setter Property="IsSelected" Value="{Binding IsSelected}" />
+            <Setter Property="ActualSize" Value="{Binding Size, Mode=OneWayToSource}" />
+
+            <Setter Property="BorderThickness" Value="2" />
+        </Style>
+    </Window.Resources>
     <Grid>
         <nodify:NodifyEditor
+            ConnectionTemplate="{StaticResource ConnectionTemplate}"
             Connections="{Binding Connections}"
             GridCellSize="10"
-            ItemsSource="{Binding Nodes}">
+            ItemContainerStyle="{StaticResource ItemContainerStyle}"
+            ItemsSource="{Binding Nodes}"
+            
+            PendingConnection="{Binding PendingConnection}"
+            PendingConnectionTemplate="{StaticResource PendingConnectionTemplate}">
             <nodify:NodifyEditor.Resources>
                 <DataTemplate DataType="{x:Type vm:BaseNodeViewModel}">
                     <nodify:Node
                         Content="{Binding Title}"
                         Input="{Binding Inputs}"
                         Output="{Binding Outputs}" />
-                    <!--<Border
-                        Padding="10"
-                        Background="#FF2D2D30"
-                        CornerRadius="4">
-                        <StackPanel>
-                            <TextBlock Text="{Binding Title}" />
-                            <ItemsControl ItemsSource="{Binding Inputs}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <nodify:Connector Anchor="{Binding Anchor}" />
-
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                            <ItemsControl ItemsSource="{Binding Outputs}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <nodify:Connector Anchor="{Binding Anchor}" />
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </StackPanel>
-
-                    </Border>-->
                 </DataTemplate>
+                <Style BasedOn="{StaticResource {x:Type nodify:NodeInput}}" TargetType="{x:Type nodify:NodeInput}">
+                    <Setter Property="Header" Value="{Binding}" />
+                    <Setter Property="IsConnected" Value="{Binding IsConnected}" />
+                    <Setter Property="Anchor" Value="{Binding Anchor, Mode=OneWayToSource}" />
+                    <Setter Property="ToolTip" Value="{Binding Value}" />
+                   
+                    <Setter Property="HeaderTemplate">
+                        <Setter.Value>
+                            <DataTemplate DataType="{x:Type vm:ConnectorViewModel}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Margin="0,0,5,0" Text="{Binding Title}" />
+
+                                </StackPanel>
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+                <Style BasedOn="{StaticResource {x:Type nodify:NodeOutput}}" TargetType="{x:Type nodify:NodeOutput}">
+                    <Setter Property="Header" Value="{Binding}" />
+                    <Setter Property="IsConnected" Value="{Binding IsConnected}" />
+                    <Setter Property="Anchor" Value="{Binding Anchor, Mode=OneWayToSource}" />
+                    <Setter Property="HeaderTemplate">
+                        <Setter.Value>
+                            <DataTemplate DataType="{x:Type vm:ConnectorViewModel}">
+                                <TextBox IsEnabled="False" Text="{Binding Value}" />
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
             </nodify:NodifyEditor.Resources>
 
         </nodify:NodifyEditor>

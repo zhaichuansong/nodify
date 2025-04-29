@@ -423,8 +423,8 @@ namespace Nodify
         /// <param name="position">The new position for the connection's endpoint.</param>
         public void UpdatePendingConnection(Point position)
         {
-            Debug.Assert(IsPendingConnection);
-
+            //Debug.Assert(IsPendingConnection);
+            if (!IsPendingConnection) return;
             _pendingConnectionEndPosition = position;
 
             var args = new PendingConnectionEventArgs(DataContext)

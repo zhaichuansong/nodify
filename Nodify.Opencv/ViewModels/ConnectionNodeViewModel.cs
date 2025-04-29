@@ -9,4 +9,9 @@ public partial class ConnectionNodeViewModel : ObservableObject
 
     [ObservableProperty]
     private ConnectorViewModel? _output;
+    public ConnectionNodeViewModel(ConnectorViewModel input ,ConnectorViewModel output)
+    {
+        Input = input;
+        Output = output;
+    }
 }
